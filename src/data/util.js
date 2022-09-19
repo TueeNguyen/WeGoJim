@@ -83,8 +83,9 @@ const fetch_token = async () => {
   const res = await fetch(url, {
     method: 'POST',
     headers: {
-      Authorization:
-        'Basic ZGQ0MDkxYjFiNTM0NGNlNDg3Mzg2NmZjNzZiYWFhM2U6ODc0ZWJmZWM4YTc1NDA3ZmJiMzA0OTBlMmM3OTdiNzE=',
+      Authorization: `Basic ${(process.env.CLIENT_ID + ':' + process.env.SECRET).toString(
+        'base64'
+      )}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });

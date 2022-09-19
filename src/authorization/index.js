@@ -8,8 +8,9 @@ async function fetch_new_token() {
   try {
     token = await fetch(url, {
       headers: {
-        Authorization:
-          'Basic ' + (process.env.CLIENT_ID + ':' + process.env.SECRET).toString('base64'),
+        Authorization: `Basic ${(process.env.CLIENT_ID + ':' + process.env.SECRET).toString(
+          'base64'
+        )}`,
       },
       form: {
         grant_type: 'client_credentials',
