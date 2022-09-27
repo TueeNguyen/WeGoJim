@@ -1,5 +1,5 @@
 const logger = require('../logger');
-const redis = require('./redis');
+const redis = require('../routes/api/rank/queue/redis');
 
 const song_prefix = 'song:';
 const songs_prefix = 'songs:';
@@ -44,6 +44,8 @@ const get_songs = async () => {
     logger.error(err);
   }
 };
+
+// const get_lastest_songs = async () => {};
 
 // const actions = async () => {
 //   try {

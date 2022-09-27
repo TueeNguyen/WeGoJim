@@ -19,7 +19,7 @@ const start_ranking = async (req, res) => {
         res.status(500).json(createErrorResponse(500, err));
       });
   } catch (err) {
-    logger.error({ err });
+    logger.error({ err }, 'Error when starting job queue');
     res.status(500).json(createErrorResponse(500, err));
   }
 };

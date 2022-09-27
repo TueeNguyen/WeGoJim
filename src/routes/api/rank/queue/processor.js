@@ -1,10 +1,10 @@
 const Song = require('../../../../data/song');
-const { fetch_token, get_playlist } = require('../../../../data/util');
+const { fetch_token, get_playlist } = require('../../../../data/spotify');
 const logger = require('../../../../logger');
 const rank_song_queue = require('./queue');
 
-const playlists = ['09rSmfgujjE9uNev9tGGCJ', '766wQ733vRmpmKqIU5fyvR'];
-// const playlists = ['4mu7aeypRUeCUsJJWzzLad'];
+//const playlists = ['09rSmfgujjE9uNev9tGGCJ', '766wQ733vRmpmKqIU5fyvR'];
+const playlists = ['4mu7aeypRUeCUsJJWzzLad'];
 const add_jobs = async () => {
   playlists.forEach(async (playlist) => {
     try {
@@ -20,9 +20,14 @@ const processor = async (job) => {
   logger.info(`Start job for playlist "${job.data.playlist_id}"`);
   try {
     const playlist = await get_playlist(job.data.playlist_id);
-    await Song.analyze_songs(playlist);
+    if (!playlist) {
+      return Promise.reject(`Can't find playlist ${job.data.playlist_id}`);
+    } else {
+      await Song.analyze_songs(playlist);
+    }
   } catch (err) {
-    logger.error(`Error fetching playlist ${job.data.playlist_id}`, err);
+    logger.error(`Error fetching playlist ${job.data.playlist_id}`);
+    logger.error(err);
   }
 };
 

@@ -1,7 +1,7 @@
-const logger = require('../logger');
-const { save_song, sort_songs, set_unix_time_stamp, get_songs } = require('../lib/storage');
+const logger = require('../../../../logger');
+const { save_song, sort_songs, set_unix_time_stamp, get_songs } = require('./storage');
 const { convert_ms_to_minute, does_string_contain_word_from_array } = require('../lib/util');
-const { get_artist, get_track_audio_features, get_total_songs } = require('./spotify');
+const { get_artist, get_track_audio_features, get_total_songs } = require('../data/spotify');
 
 class Song {
   constructor(id, name, link, artists, duration_ms, playlist_name, playlist_link, popularity) {
@@ -157,8 +157,6 @@ class Song {
       logger.error(err);
     }
   }
-
-  static async get_latest_songs() {}
 }
 
 module.exports = Song;

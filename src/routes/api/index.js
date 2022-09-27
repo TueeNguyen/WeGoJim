@@ -1,6 +1,5 @@
 const express = require('express');
 
-// Create a router that we can use to mount our API
 const router = express.Router();
 
 /**
