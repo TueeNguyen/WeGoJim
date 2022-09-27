@@ -1,6 +1,5 @@
 const express = require('express');
 
-// Create a router that we can use to mount our API
 const router = express.Router();
 
 /**
@@ -16,7 +15,6 @@ router.get('/', (req, res) => {
   // See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#controlling_caching
   res.setHeader('Cache-control', 'no-cache');
 
-  // Send a 200 'OK' response with info about our repo
   res.status(200).json({
     status: 'ok',
   });

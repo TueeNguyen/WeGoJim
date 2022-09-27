@@ -1,12 +1,7 @@
 const logger = require('../logger');
-const { save_song, sort_songs, set_unix_time_stamp, get_songs } = require('./storage');
-const {
-  convert_ms_to_minute,
-  does_string_contain_word_from_array,
-  get_artist,
-  get_track_audio_features,
-  get_total_songs,
-} = require('./util');
+const { save_song, sort_songs, set_unix_time_stamp, get_songs } = require('../lib/storage');
+const { convert_ms_to_minute, does_string_contain_word_from_array } = require('../lib/util');
+const { get_artist, get_track_audio_features, get_total_songs } = require('./spotify');
 
 class Song {
   constructor(id, name, link, artists, duration_ms, playlist_name, playlist_link, popularity) {
@@ -72,32 +67,49 @@ class Song {
     const analyzed_songs = [];
     for (const song of songs) {
       logger.info(`Analyzing song | "${song.id}" | "${song.name}"`);
+
+      // Checking if the song's name has 'hardstyle', 'dance', 'hardcore'
+      // if yes add to analyze songs
       const contains_name_keyword = does_string_contain_word_from_array(song.name, name_keywords);
       let added_to_analyzed_songs = false;
       let contains_genre = false;
       if (!added_to_analyzed_songs && contains_name_keyword) {
         analyzed_songs.push(song);
         added_to_analyzed_songs = true;
-        logger.info(`Added song | "${song.id}" | "${song.name}" as hardstyle-relevant`);
-      } else if (!added_to_analyzed_songs) {
+        logger.info(
+          `Added song | "${song.id}" | "${song.name}" as whose name contains hardstyle relevant word`
+        );
+      }
+
+      // if not added to analyzed songs => keep going
+      else if (!added_to_analyzed_songs) {
+        const fetched_genres = [];
         for (const artist of song.artists) {
           const artist_data = await get_artist(artist.id);
-          contains_genre = does_string_contain_word_from_array(artist_data.genres.join(''), genres);
+          if (artist_data.genres.length > 0) {
+            fetched_genres.push(...artist_data.genres);
+            contains_genre = does_string_contain_word_from_array(
+              artist_data.genres.join(''),
+              genres
+            );
+          }
           if (contains_genre) {
             analyzed_songs.push(song);
             added_to_analyzed_songs = true;
-            logger.info(`Added song | "${song.id}" | "${song.name}" as hardstyle-relevant`);
+            logger.info(
+              `Added song | "${song.id}" | "${song.name}" as whose artist(s) is harstyle relevant`
+            );
             break;
           }
         }
-        if (!contains_genre) {
+        if (!contains_genre && fetched_genres.length == 0) {
           const audio_features = await get_track_audio_features(song.id);
           if (audio_features.energy > min_energy_level) {
             analyzed_songs.push(song);
             added_to_analyzed_songs = true;
-            logger.info(`Added song | "${song.id}" | "${song.name}" as hardstyle-relevant`);
+            logger.info(`Added song | "${song.id}" | "${song.name}" as whose energy is above 0.5`);
           }
-        } else {
+        } else if (!added_to_analyzed_songs) {
           logger.warn(
             `Skipping song | "${song.id}" | "${song.name}", because not sure it is hardstyle/good work out song`
           );
@@ -145,6 +157,8 @@ class Song {
       logger.error(err);
     }
   }
+
+  static async get_latest_songs() {}
 }
 
 module.exports = Song;
