@@ -1,5 +1,5 @@
 {
-  "name": "wegojim",
+  "name": "@tueenguyen/server",
   "version": "1.0.0",
   "description": "Hardstyle songs for gym rats",
   "main": "index.js",
@@ -9,10 +9,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "cross-env LOG_LEVEL=debug nodemon ./src/index.js --watch src",
-    "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/index.js --watch src",
-    "lint": "eslint --config .eslintrc.js src/**",
-    "prettier-check": "prettier --check src/** --config .prettierrc",
-    "prettier-write": "prettier --write src/** --config .prettierrc"
+    "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/index.js --watch src"
   },
   "lint-staged": {
     "src/**": "eslint"

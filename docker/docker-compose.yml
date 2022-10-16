@@ -1,20 +1,59 @@
 version: '3.4'
 services:
+  # nginx:
+  #   container_name: 'nginx'
+  #   image: 'nginx'
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ../nginx
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - server
+  #   #   # - web
+  #   restart: always
+
+  server:
+    init: true
+    container_name: 'server'
+    image: 'server'
+    links:
+      - redis
+    build:
+      dockerfile: Dockerfile
+      context: '../src/server'
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+      - mongo
+    restart: always
+
   redis:
     image: redis:latest
     container_name: 'redis'
     command: ['redis-server']
-    restart: always
-    ports:
-      - '6379:6379'
+
+    # ports:
+    #   - '6379:6379'
+    expose:
+      - 6379
     volumes:
       - ../data/redis-data:/data
+
   mongo:
     image: mongo:latest
     container_name: 'mongo'
-    restart: always
     ports:
       - '27017:27017'
     volumes:
       - ../data/mongo-data:/data/db
-      - ../scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo-js:ro
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  # web:
+  #   container_name: 'web'
+  #   image: 'web'
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: '../src/web'
+  #   restart: always
