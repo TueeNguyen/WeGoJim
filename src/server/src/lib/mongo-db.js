@@ -1,16 +1,50 @@
-// getting-started.js
-const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
+const logger = require('../logger');
+require('dotenv').config();
+// or as an es module:
 
-main().catch((err) => console.log(err));
+// Connection URL
+const url = 'mongodb://mongo:27017';
+const client = new MongoClient(url);
 
-async function main() {
-  await mongoose.connect('mongodb://localhost:27017');
-  const UserModel = mongoose.model('User', new mongoose.Schema({ name: String }));
-  const userDoc = new UserModel({ name: 'Foo' });
-  await userDoc.save();
-  const userFromDb = await UserModel.findOne({ name: 'Foo' });
-  console.log(userFromDb);
-  // use `await mongoose.connect('mongodb://user:password@localhost:27017/test');` if your database has auth enabled
+// Database Name
+const dbName = 'WeGoJim';
+
+let db = null;
+
+async function start() {
+  try {
+    await client.connect();
+    logger.info('Connected successfully to server');
+    db = client.db(dbName);
+  } catch (err) {
+    logger.error(err);
+  }
 }
 
-main();
+module.exports.createDefaultSuperUser = async function () {
+  try {
+    // Use connect method to connect to the server
+    await start();
+    const collection = db.collection('Super_Users');
+
+    // the following code examples can be pasted here...
+    await collection.insertOne({
+      name: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+    });
+  } catch (err) {
+    logger.error(err);
+  }
+};
+
+module.exports.findSuperUser = async function (username) {
+  try {
+    const collection = db.collection('Super_Users');
+    // the following code examples can be pasted here...
+    const super_user = collection.findOne({ name: `${username}` });
+    return super_user;
+  } catch (err) {
+    logger.error(err);
+  }
+};

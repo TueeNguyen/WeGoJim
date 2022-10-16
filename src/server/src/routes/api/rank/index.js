@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { start_ranking } = require('./post');
 const router = Router();
 
-router.post('/start', start_ranking);
+router.post('/', start_ranking);
 
 // Other routes will go here later on...
 
