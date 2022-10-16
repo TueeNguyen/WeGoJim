@@ -10,12 +10,12 @@
     "start": "node src/index.js",
     "dev": "cross-env LOG_LEVEL=debug nodemon ./src/index.js --watch src",
     "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/index.js --watch src",
-    "lint": "eslint --config .eslintrc.js src/**",
+    "lint": "eslint --config .eslintrc.js src/**/*.js",
     "prettier-check": "prettier --check src/** --config .prettierrc",
     "prettier-write": "prettier --write src/** --config .prettierrc"
   },
   "lint-staged": {
-    "src/**": "eslint"
+    "src/**/*.js": "eslint"
   },
   "author": "Tue Nguyen",
   "license": "ISC",
