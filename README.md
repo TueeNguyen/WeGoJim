@@ -2,7 +2,7 @@
 
 - Start `redis`:
   ```bash
-  docker-compose -f docker/docker-compose.yml --build -d up
+  docker-compose -f docker/docker-compose.yml up --build -d
   ```
 - Start server:
   ```bash
