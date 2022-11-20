@@ -4,3 +4,5 @@ redis-data/
 
 data/
 !src/**/data
+docker-credential-pass-v0.6.0-amd64.tar.gz
+wegojim-1.0.0.tgz

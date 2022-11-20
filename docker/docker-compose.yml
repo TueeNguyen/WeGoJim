@@ -19,6 +19,8 @@ services:
     image: 'server'
     links:
       - redis
+    env_file:
+      - ../src/server/.env
     build:
       dockerfile: Dockerfile
       context: '../src/server'
@@ -27,7 +29,6 @@ services:
     depends_on:
       - redis
       - mongo
-    restart: always
 
   redis:
     image: redis:latest
@@ -44,6 +45,11 @@ services:
   mongo:
     image: mongo:latest
     container_name: 'mongo'
+    environment:
+      # provide your credentials here
+      - MONGO_INITDB_ROOT_USERNAME=root
+      # forward MONGO_INITDB_ROOT_PASSWORD from host machine, if not = null
+      - MONGO_INITDB_ROOT_PASSWORD
     ports:
       - '27017:27017'
     volumes:

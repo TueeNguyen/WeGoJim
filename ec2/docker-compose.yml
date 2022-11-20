@@ -3,6 +3,8 @@ services:
   server:
     init: true
     container_name: 'server'
+    env_file:
+      - ./.env
     image: 'tuedockerid1107/server:latest'
     links:
       - redis
